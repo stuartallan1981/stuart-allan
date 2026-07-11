@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certified Cloud Practitioner Portfolio</title>
+    <script>
+        const API_BASE = 'https://fc9brxatui.execute-api.eu-west-2.amazonaws.com/prod';
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            color: #333;
+            line-height: 1.6;
+            background-color: #f8f9fa;
+        }
+
+        /* Navigation */
+        nav {
+            background: #232f3e;
+            color: #fff;
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #ff9900;
+        }
+
+        /* Sections */
+        section {
+            padding: 5rem 2rem 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            color: #232f3e;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #ff9900;
+            padding-bottom: 0.3rem;
+        }
+
+        /* Hero Section */
+        #hero {
+            background: linear-gradient(135deg, #232f3e 0%, #1a2430 100%);
+            color: #fff;
+            text-align: center;
+            padding: 8rem 2rem 5rem;
+        }
+
+        #hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        #hero p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Credentials and Resources Section */
+        #credentials-resources p {
+            margin-bottom: 1rem;
+        }
+
+        #credentials-resources ul {
+            margin: 1rem 0 1rem 1.2rem;
+        }
+
+        #credentials-resources a {
+            color: #232f3e;
+            font-weight: 500;
+            text-decoration: none;
+        }
+
+        #credentials-resources a:hover {
+            text-decoration: underline;
+        }
+
+        .cv-buttons {
+            margin-top: 1rem;
+        }
+
+        .cv-buttons a {
+            background: #ff9900;
+            color: #232f3e !important;
+            padding: 0.7rem 1.4rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            display:inline-block;
+        }
+
+        .cv-buttons a:hover {
+            opacity: 0.9;
+            text-decoration: none !important;
+        }
+
+        /* About */
+        #about p {
+            margin-bottom: 1rem;
+            font-size: 1.05rem;
+        }
+
+        /* Skills */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+        }
+
+        .skill-card {
+            background: #fff;
+            padding: 1.2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            text-align: center;
+            font-weight: 500;
+            transition: transform 0.3s;
+        }
+
+        .skill-card:hover {
+            transform: translateY(-4px);
+        }
+
+        /* Projects */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .project-card-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .project-card {
+            background: #fff;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .project-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+        }
+
+        .project-card h3 {
+            color: #232f3e;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Contact Form */
+        #contact-form {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        button {
+            background: #ff9900;
+            color: #232f3e;
+            border: none;
+            padding: 0.9rem 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #ffb74d;
+        }
+
+        /* Visitor Counter - now at bottom */
+        .visitor-counter {
+            text-align: center;
+            font-size: 1.1rem;
+            background: #f1f3f5;
+            padding: 1rem 1.2rem;
+            border-radius: 8px;
+            max-width: 300px;
+            margin: 2rem auto 0;
+            color: #232f3e;
+        }
+
+        /* Footer */
+        footer {
+            background: #232f3e;
+            color: #fff;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        /* HTTPS compatible styles */
+        @media (prefers-color-scheme: light) {
+            body { background: #f8f9fa; color: #333; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <ul>
+            <li><a href="#hero">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#credentials-resources">Credentials and Resources</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero">
+        <h1>Stuart Allan</h1>
+        <p>Certified Cloud Practitioner | Architecting Scalable, Secure & Cost-Optimised Cloud Solutions</p>
+    </section>
+
+    <!-- About Me -->
+    <section id="about">
+        <h2>About Me</h2>
+        <p>I am a newly qualified Certified Cloud Practitioner with some experience desiging cloud infrastructure on AWS.</p>
+        <p>Dynamic professional with a strong foundation in communication, teamwork and leadership. Proven ability to teach and collaborate effectively, coupled with a constant learning mindset. Demonstrates stamina for physical work and excels in process improvement suggestions. Efficient time management skills ensure optimal productivity. Committed to continuous professional development and contributing to organisational success.</p>
+        <p>Previously I was a qualified teacher with over 20 years' experience teaching science, physics and mathematics to years 7-13.</p>
+    </section>
+
+    <!-- Skills -->
+    <section id="skills">
+        <h2>Technical Skills</h2>
+        <div class="skills-grid">
+            <div class="skill-card">AWS Core Services</div>
+            <div class="skill-card">Cloud Security</div>
+            <div class="skill-card">Networking & VPC</div>
+            <div class="skill-card">Cost Optimisation</div>
+            <div class="skill-card">Monitoring & Logging</div>
+        </div>
+    </section>
+
+    <!-- Credentials and Resources Section -->
+    <section id="credentials-resources">
+        <h2>Credentials and Resources</h2>
+
+        <div id="skillbuilder" style="margin-bottom:2rem;">
+            <h3>AWS Skill Builder</h3>
+            <p>Records of structured learning paths, hands-on labs, and skill development progress — including AWS Skill Builder courses, cloud workshops, and technical training modules completed to build and validate expertise.</p>
+            <ul>
+                <li><a href="https://skillsprofile.skillbuilder.aws/user/stuartallan/certification-badges" target="_blank">View my AWS Skill Builder profile & progress</a></li>
+            </ul>
+            </div>
+
+        <div id="certificates" style="margin-bottom:2rem;">
+            <h3>Certificates & Qualifications</h3>
+            <p>Official certifications and qualifications earned from cloud providers and recognised training bodies, demonstrating technical knowledge and practical capability:</p>
+            <ul>
+                <li><a href="https://www.stuart-allan.com/AWSCCPCert.pdf" target="_blank">AWS Certified Cloud Practitioner</a></li>
+            </ul>
+        </div>
+
+        <div id="cv">
+            <h3>My CV</h3>
+            <p>View my full CV, including detailed work history, projects, technical skills, and education background.</p>
+            <ul>
+                <li><a href="https://www.stuart-allan.com/cv.html">View CV</a></li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Projects -->
+    <section id="projects">
+        <h2>Key Projects</h2>
+        <div class="projects-grid">
+            <a href="https://www.allanfamilyholidayphotos.com" target="_blank" class="project-card-link">
+                <div class="project-card">
+                    <h3>My First Project</h3>
+                    <p>Produced a static website hosted on AWS S3 and delivered globally via Amazon CloudFront and Route 53 to showcase my family holiday photos over the last 7 years.</p>
+                    <p>Click here to visit the website.</p>                    
+                </div>
+            </a>
+           
+                <div class="project-card">
+                    <h3>Certified Cloud Practitioner Portfolio</h3>
+                    <p>A second website. The one you are currently looking at.</p>
+                </div>
+
+        </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact">
+        <h2>Get In Touch</h2>
+        <form id="contact-form">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="message">Message</label>
+                <textarea id="message" name="message" rows="5" required></textarea>
+            </div>
+            <button type="submit">Send Message</button>
+        </form>
+
+        <!-- Visitor Counter moved here -->
+        <div class="visitor-counter">
+            Visitors: <span id="count-value">Loading...</span>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Stuart Allan — Certified Cloud Practitioner Portfolio</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Fetch visitor count on page load
+        window.addEventListener('load', async () => {
+            try {
+                const response = await fetch(`${API_BASE}/count`);
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('count-value').textContent = data.visitorCount || '0';
+                } else {
+                    document.getElementById('count-value').textContent = 'Unavailable';
+                }
+            } catch (err) {
+                document.getElementById('count-value').textContent = 'Error';
+            }
+        });
+
+        // Handle form submission
+        document.getElementById('contact-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                message: document.getElementById('message').value
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}/contact`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                if (response.ok) {
+                    alert('Thank You! Message sent successfully!');
+                    document.getElementById('contact-form').reset();
+                } else {
+                    alert('Failed to send message. Please try again.');
+                }
+            } catch (err) {
+                alert('Error connecting to the service.');
+            }
+        });
+    </script>
+</body>
+</html>
