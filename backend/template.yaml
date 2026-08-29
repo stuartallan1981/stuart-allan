@@ -25,7 +25,7 @@ Resources:
   DeletionRequestTopic:
     Type: AWS::SNS::Topic
     Properties:
-      TopicName: holiday-converter-deletion-requests
+      TopicName: Holiday-Converter-App-deletion-requests
       Subscription:
         - Protocol: email
           Endpoint: !Ref NotificationEmail
