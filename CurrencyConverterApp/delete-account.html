@@ -55,15 +55,95 @@
         <h1>Request Account & Data Deletion</h1>
         <p>If you wish to delete your <strong>Holiday Currency Converter</strong> account and remove all associated personal data from our systems, please complete the form below.</p>
         
-        <form action="mailto:stuartallan1981@gmail.com" method="post" enctype="text/plain">
+        <!-- Status message shown after submission -->
+        <div id="statusMsg" role="alert" style="display:none; margin-top:15px; padding:12px; border-radius:4px;"></div>
+
+        <form id="deleteForm" onsubmit="submitRequest(event)" novalidate>
             <label for="email">Account Email Address:</label>
-            <input type="email" id="email" name="Email" required placeholder="user@example.com">
+            <input type="email" id="email" name="Email" required placeholder="user@example.com"
+                   autocomplete="email">
 
             <label for="reason">Reason for Deletion (Optional):</label>
-            <textarea id="reason" name="Reason" rows="3" placeholder="Let us know why you are leaving..."></textarea>
+            <textarea id="reason" name="Reason" rows="3"
+                      placeholder="Let us know why you are leaving..." maxlength="2000"></textarea>
 
-            <button type="submit">Submit Deletion Request</button>
+            <button type="submit" id="submitBtn">Submit Deletion Request</button>
         </form>
+
+        <script>
+            // ── Replace this value after deploying the SAM stack ──────────────
+            // Run:  aws cloudformation describe-stacks --stack-name holiday-converter-backend \
+            //         --query "Stacks[0].Outputs[?OutputKey=='ApiEndpoint'].OutputValue" \
+            //         --output text
+            // Then paste the URL below.
+            var API_ENDPOINT = "REPLACE_WITH_API_GATEWAY_ENDPOINT";
+            // ─────────────────────────────────────────────────────────────────
+
+            function submitRequest(e) {
+                e.preventDefault();
+
+                var email  = document.getElementById("email").value.trim();
+                var reason = document.getElementById("reason").value.trim();
+                var btn    = document.getElementById("submitBtn");
+
+                // Basic client-side validation
+                if (!email) {
+                    showStatus("Please enter your account email address.", "error");
+                    return;
+                }
+
+                btn.disabled    = true;
+                btn.textContent = "Submitting…";
+                hideStatus();
+
+                fetch(API_ENDPOINT, {
+                    method:  "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body:    JSON.stringify({ email: email, reason: reason })
+                })
+                .then(function(response) {
+                    return response.json().then(function(data) {
+                        return { ok: response.ok, data: data };
+                    });
+                })
+                .then(function(result) {
+                    if (result.ok) {
+                        showStatus(
+                            result.data.message ||
+                            "Your deletion request has been received. We will process it within 30 days.",
+                            "success"
+                        );
+                        document.getElementById("deleteForm").reset();
+                    } else {
+                        showStatus(
+                            result.data.error || "Something went wrong. Please try again.",
+                            "error"
+                        );
+                    }
+                })
+                .catch(function() {
+                    showStatus("Network error. Please check your connection and try again.", "error");
+                })
+                .finally(function() {
+                    btn.disabled    = false;
+                    btn.textContent = "Submit Deletion Request";
+                });
+            }
+
+            function showStatus(msg, type) {
+                var el = document.getElementById("statusMsg");
+                el.textContent   = msg;
+                el.style.display = "block";
+                el.style.background = type === "success" ? "#d4edda" : "#f8d7da";
+                el.style.color      = type === "success" ? "#155724" : "#721c24";
+                el.style.border     = "1px solid " + (type === "success" ? "#c3e6cb" : "#f5c6cb");
+                el.scrollIntoView({ behavior: "smooth", block: "nearest" });
+            }
+
+            function hideStatus() {
+                document.getElementById("statusMsg").style.display = "none";
+            }
+        </script>
 
         <div class="info-box">
             <strong>What happens when you request deletion?</strong>

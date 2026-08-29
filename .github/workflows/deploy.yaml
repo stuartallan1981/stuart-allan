@@ -1,32 +1,93 @@
-name: Deploy Portfolio to S3
- 
+name: Deploy Portfolio
+
 on:
   push:
     branches:
       - main
- 
+
 jobs:
-  deploy:
+
+  # ── 1. Deploy serverless backend (SAM) ─────────────────────────────────────
+  deploy-backend:
+    name: Deploy Backend (SAM)
     runs-on: ubuntu-latest
- 
+
+    outputs:
+      api_endpoint: ${{ steps.get_endpoint.outputs.api_endpoint }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
- 
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-access-key-id:     ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
- 
+          aws-region:            ${{ secrets.AWS_REGION }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install AWS SAM CLI
+        run: pip install aws-sam-cli
+
+      - name: SAM build
+        run: sam build --template-file backend/template.yaml
+
+      - name: SAM deploy
+        run: |
+          sam deploy \
+            --stack-name holiday-converter-backend \
+            --s3-bucket ${{ secrets.SAM_DEPLOYMENT_BUCKET }} \
+            --capabilities CAPABILITY_IAM \
+            --no-fail-on-empty-changeset \
+            --parameter-overrides \
+              RecipientEmail=stuartallan1981@gmail.com \
+              SenderEmail=stuartallan1981@gmail.com
+
+      - name: Get API endpoint
+        id: get_endpoint
+        run: |
+          ENDPOINT=$(aws cloudformation describe-stacks \
+            --stack-name holiday-converter-backend \
+            --query "Stacks[0].Outputs[?OutputKey=='ApiEndpoint'].OutputValue" \
+            --output text)
+          echo "api_endpoint=$ENDPOINT" >> "$GITHUB_OUTPUT"
+
+  # ── 2. Deploy frontend to S3 (inject API endpoint first) ───────────────────
+  deploy-frontend:
+    name: Deploy Frontend (S3 + CloudFront)
+    runs-on: ubuntu-latest
+    needs: deploy-backend
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id:     ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region:            ${{ secrets.AWS_REGION }}
+
+      - name: Inject API endpoint into delete-account.html
+        run: |
+          ENDPOINT="${{ needs.deploy-backend.outputs.api_endpoint }}"
+          sed -i "s|REPLACE_WITH_API_GATEWAY_ENDPOINT|${ENDPOINT}|g" \
+            CurrencyConverterApp/delete-account.html
+
       - name: Sync files to S3
         run: |
           aws s3 sync . s3://${{ secrets.S3_BUCKET_NAME }} \
             --exclude '.git/*' \
             --exclude '.github/*' \
+            --exclude 'backend/*' \
             --delete
- 
+
       - name: Invalidate CloudFront cache
         run: |
           aws cloudfront create-invalidation \

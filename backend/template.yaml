@@ -1,0 +1,79 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Holiday Currency Converter – serverless backend.
+  Handles account deletion requests via API Gateway → Lambda → SNS → Email.
+
+Parameters:
+  NotificationEmail:
+    Type: String
+    Description: >
+      Email address that will receive account deletion notifications.
+      AWS will send a confirmation link to this address when the stack is first deployed —
+      you must click it before notifications will be delivered.
+    Default: stuartallan1981@gmail.com
+
+Globals:
+  Function:
+    Runtime: python3.12
+    Timeout: 10
+    MemorySize: 128
+
+Resources:
+
+  # ── SNS Topic ────────────────────────────────────────────────────────────────
+  DeletionRequestTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: holiday-converter-deletion-requests
+      Subscription:
+        - Protocol: email
+          Endpoint: !Ref NotificationEmail
+
+  # ── Lambda function ──────────────────────────────────────────────────────────
+  DeleteAccountFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: holiday-converter-delete-account
+      CodeUri: delete-account/
+      Handler: lambda_function.lambda_handler
+      Description: Receives account deletion requests and publishes them to SNS.
+      Environment:
+        Variables:
+          SNS_TOPIC_ARN: !Ref DeletionRequestTopic
+      Policies:
+        - Statement:
+            Effect: Allow
+            Action: sns:Publish
+            Resource: !Ref DeletionRequestTopic
+      Events:
+        PostRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref DeleteAccountApi
+            Path: /delete-account
+            Method: POST
+        OptionsRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref DeleteAccountApi
+            Path: /delete-account
+            Method: OPTIONS
+
+  # ── API Gateway ──────────────────────────────────────────────────────────────
+  DeleteAccountApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: holiday-converter-api
+      StageName: prod
+      Cors:
+        AllowMethods: "'POST,OPTIONS'"
+        AllowHeaders: "'Content-Type'"
+        AllowOrigin:  "'*'"
+
+Outputs:
+  ApiEndpoint:
+    Description: HTTPS endpoint for the delete-account form.
+    Value: !Sub "https://${DeleteAccountApi}.execute-api.${AWS::Region}.amazonaws.com/prod/delete-account"
+    Export:
+      Name: DeleteAccountApiEndpoint
