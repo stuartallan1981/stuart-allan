@@ -4,6 +4,29 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Holiday Currency Converter</title>
+
+  <!-- ── Auth gate: run before ANY page content renders ──────────────
+       If the user is not signed in, go straight to the sign-in page.
+       Signed-in users continue to the converter below. -->
+  <script>
+    (function () {
+      var signedIn = false;
+      for (var i = 0; i < localStorage.length; i++) {
+        var key = localStorage.key(i);
+        if (key && key.indexOf('CognitoIdentityServiceProvider.') === 0 && key.slice(-8) === '.idToken') {
+          signedIn = true;
+          break;
+        }
+      }
+      if (!signedIn) {
+        signedIn = !!(localStorage.getItem('cognitoAccessToken') || localStorage.getItem('cognitoIdToken'));
+      }
+      if (!signedIn) {
+        window.location.replace('signin.html');
+      }
+    })();
+  </script>
+
   <style>
     body {
       font-family: Arial, sans-serif;
