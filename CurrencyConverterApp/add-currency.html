@@ -43,14 +43,14 @@
       background: #fff;
       padding: 25px 30px;
       border-radius: 10px;
-      box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+      box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
       width: 440px;
       text-align: center;
       overflow-y: auto;
       max-height: 95vh;
     }
 
-    /* ── Top bar ── */
+    /* ── Top bar: language left, nav right ── */
     .top-bar {
       display: flex;
       align-items: center;
@@ -191,7 +191,6 @@
 
       <!--============================================================
       HOSTED BUTTON — LIVE ONLY
-      Re-enable this block when going live (swap SDK script tag too).
       ============================================================
       <div id="paypal-container-2LY9HVYP4BJC6"></div>
       <script>
@@ -203,18 +202,49 @@
               data-i18n="cancelBtn">Cancel &amp; Return</button>
     </form>
 
-    <footer class="gallery-footer" style="margin-top:20px; text-align:center; font-size:0.9em; color:#555;">
-      <div class="copyright">
-        <p></p>
-        <span data-i18n="footer">&copy; 2026 S Allan. All rights reserved.</span>
-      </div>
+    <footer style="margin-top:20px; text-align:center; font-size:0.9em; color:#555;">
+      <span data-i18n="footer">&copy; 2026 S Allan. All rights reserved.</span>
     </footer>
   </div>
 
-  <script src="js/translations.js"></script>
-
+  <!-- Inline translations (no separate js/ folder in this directory) -->
   <script>
-    // ── Apply saved language on load ──────────────────────────────
+    /* ── Minimal i18n — mirrors desktop js/translations.js ─────── */
+    const TRANSLATIONS = {
+      en: { addCurrencyTitle:'Add Additional Currency', oneTimeFee:'One-Time Fee: £0.99', step1:'1. Currency Details', selectCurrencyLabel:'Select World Currency', selectCurrencyDefault:'-- Select a Country/Currency --', notListedHint:'If the currency you require is not listed, or you need a crypto currency, please contact us via the link in the drop down box at the top right', step2:'2. Payment via PayPal', sandboxWarning:'🧪 <strong>Testing mode — you will not be charged.</strong><br>This app is currently running in PayPal Sandbox mode. Any card or PayPal details you enter are test credentials only. No real payment will be taken.', cancelBtn:'Cancel &amp; Return', footer:'© 2026 S Allan. All rights reserved.', navHome:'🏠 Home', navAddCurrency:'➕ Add Currency (£0.99)', navContact:'✉️ Contact us', navPrivacy:'🔒 Privacy Policy', navDeleteAccount:'🗑️ Delete Account', navSignOut:'🚪 Sign Out', selectCurrencyAlert:'Please select a currency from the list before paying.', paymentError:'Payment processing error. Please try again.' },
+      fr: { addCurrencyTitle:'Ajouter une devise supplémentaire', oneTimeFee:'Frais uniques : 0,99 £', step1:'1. Détails de la devise', selectCurrencyLabel:'Sélectionner une devise mondiale', selectCurrencyDefault:'-- Sélectionnez un pays/une devise --', notListedHint:'Si la devise requise n\'est pas répertoriée, ou si vous avez besoin d\'une cryptomonnaie, veuillez nous contacter via le lien dans le menu déroulant en haut à droite', step2:'2. Paiement via PayPal', sandboxWarning:'🧪 <strong>Mode test — vous ne serez pas facturé.</strong><br>Cette application est en mode Sandbox PayPal. Les données saisies sont des données de test uniquement. Aucun paiement réel ne sera effectué.', cancelBtn:'Annuler et retourner', footer:'© 2026 S Allan. Tous droits réservés.', navHome:'🏠 Accueil', navAddCurrency:'➕ Ajouter une devise (0,99 £)', navContact:'✉️ Nous contacter', navPrivacy:'🔒 Politique de confidentialité', navDeleteAccount:'🗑️ Supprimer le compte', navSignOut:'🚪 Se déconnecter', selectCurrencyAlert:'Veuillez sélectionner une devise avant de payer.', paymentError:'Erreur de paiement. Veuillez réessayer.' },
+      es: { addCurrencyTitle:'Añadir divisa adicional', oneTimeFee:'Pago único: £0,99', step1:'1. Detalles de la divisa', selectCurrencyLabel:'Seleccionar divisa mundial', selectCurrencyDefault:'-- Seleccione un país/divisa --', notListedHint:'Si la divisa requerida no aparece o necesita una criptomoneda, contáctenos mediante el enlace del menú desplegable en la parte superior derecha', step2:'2. Pago mediante PayPal', sandboxWarning:'🧪 <strong>Modo de prueba — no se le cobrará.</strong><br>Esta aplicación está en modo Sandbox de PayPal. Los datos introducidos son de prueba. No se realizará ningún pago real.', cancelBtn:'Cancelar y volver', footer:'© 2026 S Allan. Todos los derechos reservados.', navHome:'🏠 Inicio', navAddCurrency:'➕ Añadir divisa (£0,99)', navContact:'✉️ Contáctenos', navPrivacy:'🔒 Política de privacidad', navDeleteAccount:'🗑️ Eliminar cuenta', navSignOut:'🚪 Cerrar sesión', selectCurrencyAlert:'Seleccione una divisa antes de pagar.', paymentError:'Error en el pago. Inténtelo de nuevo.' },
+      de: { addCurrencyTitle:'Weitere Währung hinzufügen', oneTimeFee:'Einmalige Gebühr: £0,99', step1:'1. Währungsdetails', selectCurrencyLabel:'Weltwährung auswählen', selectCurrencyDefault:'-- Land/Währung auswählen --', notListedHint:'Falls die gewünschte Währung nicht aufgeführt ist oder Sie eine Kryptowährung benötigen, kontaktieren Sie uns über den Link im Dropdown-Menü oben rechts', step2:'2. Zahlung über PayPal', sandboxWarning:'🧪 <strong>Testmodus — Sie werden nicht belastet.</strong><br>Diese App läuft im PayPal-Sandbox-Modus. Eingegebene Daten sind nur Testdaten. Es wird keine echte Zahlung durchgeführt.', cancelBtn:'Abbrechen und zurück', footer:'© 2026 S Allan. Alle Rechte vorbehalten.', navHome:'🏠 Startseite', navAddCurrency:'➕ Währung hinzufügen (£0,99)', navContact:'✉️ Kontakt', navPrivacy:'🔒 Datenschutzrichtlinie', navDeleteAccount:'🗑️ Konto löschen', navSignOut:'🚪 Abmelden', selectCurrencyAlert:'Bitte wählen Sie eine Währung aus, bevor Sie bezahlen.', paymentError:'Zahlungsfehler. Bitte versuchen Sie es erneut.' },
+      it: { addCurrencyTitle:'Aggiungi valuta aggiuntiva', oneTimeFee:'Tariffa una tantum: £0,99', step1:'1. Dettagli valuta', selectCurrencyLabel:'Seleziona valuta mondiale', selectCurrencyDefault:'-- Seleziona un paese/valuta --', notListedHint:'Se la valuta richiesta non è elencata, o hai bisogno di una criptovaluta, contattaci tramite il link nel menu a discesa in alto a destra', step2:'2. Pagamento tramite PayPal', sandboxWarning:'🧪 <strong>Modalità test — non verrà addebitato nulla.</strong><br>Questa app è in modalità Sandbox PayPal. I dati inseriti sono solo di test. Nessun pagamento reale sarà effettuato.', cancelBtn:'Annulla e torna', footer:'© 2026 S Allan. Tutti i diritti riservati.', navHome:'🏠 Home', navAddCurrency:'➕ Aggiungi valuta (£0,99)', navContact:'✉️ Contattaci', navPrivacy:'🔒 Informativa sulla privacy', navDeleteAccount:'🗑️ Elimina account', navSignOut:'🚪 Esci', selectCurrencyAlert:'Seleziona una valuta prima di pagare.', paymentError:'Errore di pagamento. Riprova.' }
+    };
+
+    function getLang() { return localStorage.getItem('appLang') || 'en'; }
+    function t(key) { const tbl = TRANSLATIONS[getLang()] || TRANSLATIONS.en; return tbl[key] !== undefined ? tbl[key] : (TRANSLATIONS.en[key] || key); }
+
+    function applyTranslations(lang) {
+      const tbl = TRANSLATIONS[lang] || TRANSLATIONS.en;
+      document.querySelectorAll('[data-i18n]').forEach(el => { const k = el.getAttribute('data-i18n'); if (tbl[k] !== undefined) el.innerHTML = tbl[k]; });
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => { const k = el.getAttribute('data-i18n-placeholder'); if (tbl[k] !== undefined) el.placeholder = tbl[k]; });
+    }
+
+    function _rebuildNavDropdown(lang) {
+      const tbl = TRANSLATIONS[lang] || TRANSLATIONS.en;
+      const dd  = document.getElementById('titleDropdown');
+      if (!dd) return;
+      const cur = dd.value;
+      dd.querySelectorAll('option[data-i18n-nav]').forEach(opt => { const k = opt.getAttribute('data-i18n-nav'); if (tbl[k] !== undefined) opt.textContent = tbl[k]; });
+      dd.value = cur;
+    }
+
+    function setLang(code) {
+      localStorage.setItem('appLang', code);
+      document.documentElement.lang = code;
+      applyTranslations(code);
+      document.querySelectorAll('.lang-picker').forEach(s => { s.value = code; });
+      _rebuildNavDropdown(code);
+    }
+
+    // Apply on load
     (function() {
       const lang = getLang();
       document.documentElement.lang = lang;
@@ -250,7 +280,6 @@
       return "guest_user";
     }
 
-    // World Currencies structured by Country Name (Alphabetical)
     const worldCurrencies = [
       { country: "Afghanistan",                   code: "AFN", name: "Afghan Afghani"               },
       { country: "Albania",                        code: "ALL", name: "Albanian Lek"                 },
@@ -435,16 +464,9 @@
               await fetch('https://teiit1vla3.execute-api.eu-west-2.amazonaws.com/prod/purchases', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  userId: userId,
-                  currencyCode: selectedData.code,
-                  currencyName: selectedData.name,
-                  country: selectedData.country
-                })
+                body: JSON.stringify({ userId, currencyCode: selectedData.code, currencyName: selectedData.name, country: selectedData.country })
               });
-            } catch (err) {
-              console.error("Failed to log purchase to database:", err);
-            }
+            } catch (err) { console.error("Failed to log purchase:", err); }
             const savedCurrencies = JSON.parse(localStorage.getItem("customCurrencies")) || {};
             savedCurrencies[selectedData.code] = `${selectedData.country} (${selectedData.name})`;
             localStorage.setItem("customCurrencies", JSON.stringify(savedCurrencies));

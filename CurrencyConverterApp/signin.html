@@ -31,7 +31,7 @@
       max-height: 95vh;
       box-sizing: border-box;
     }
-    /* ── Top bar: language left, nav right ── */
+    /* ── Top bar ── */
     .top-bar {
       display: flex;
       align-items: center;
@@ -61,38 +61,12 @@
       text-decoration: underline;
       letter-spacing: 0.5px;
     }
-    .tab-row {
-      display: flex;
-      border-radius: 6px;
-      overflow: hidden;
-      border: 1px solid #007bff;
-      margin-bottom: 20px;
-    }
-    .tab-btn {
-      flex: 1;
-      padding: 10px;
-      font-size: 15px;
-      font-weight: bold;
-      border: none;
-      border-radius: 0;
-      margin: 0;
-      cursor: pointer;
-      background: #fff;
-      color: #007bff;
-      transition: background 0.2s, color 0.2s;
-    }
+    .tab-row { display: flex; border-radius: 6px; overflow: hidden; border: 1px solid #007bff; margin-bottom: 20px; }
+    .tab-btn { flex: 1; padding: 10px; font-size: 15px; font-weight: bold; border: none; border-radius: 0; margin: 0; cursor: pointer; background: #fff; color: #007bff; transition: background 0.2s, color 0.2s; }
     .tab-btn.active { background: #007bff; color: #fff; }
     .tab-panel { display: none; }
     .tab-panel.active { display: block; }
-    input, select, button {
-      width: 100%;
-      padding: 10px;
-      margin: 8px 0;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      font-size: 16px;
-      box-sizing: border-box;
-    }
+    input, select, button { width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; box-sizing: border-box; }
     label { font-weight: bold; display: block; text-align: left; margin-top: 10px; font-size: 14px; }
     button { background-color: #007bff; color: white; border: none; font-weight: bold; cursor: pointer; margin-top: 15px; transition: background 0.2s ease; }
     button:hover { background-color: #0056b3; }
@@ -128,21 +102,17 @@
 
     <div class="tab-row" role="tablist">
       <button class="tab-btn active" id="tabSignIn" role="tab" aria-selected="true"
-              aria-controls="panelSignIn" onclick="switchTab('signin')"
-              data-i18n="tabSignIn">Sign In</button>
+              aria-controls="panelSignIn" onclick="switchTab('signin')" data-i18n="tabSignIn">Sign In</button>
       <button class="tab-btn" id="tabRegister" role="tab" aria-selected="false"
-              aria-controls="panelRegister" onclick="switchTab('register')"
-              data-i18n="tabRegister">Register</button>
+              aria-controls="panelRegister" onclick="switchTab('register')" data-i18n="tabRegister">Register</button>
     </div>
 
     <div id="statusMessage" class="status-msg"></div>
 
-    <!-- Sign In panel -->
     <div id="panelSignIn" class="tab-panel active" role="tabpanel" aria-labelledby="tabSignIn">
       <form id="signInForm" onsubmit="handleSignIn(event)">
         <label for="siEmail" data-i18n="emailLabel">Email Address</label>
-        <input type="email" id="siEmail" data-i18n-placeholder="emailPlaceholder"
-               placeholder="name@example.com" required>
+        <input type="email" id="siEmail" data-i18n-placeholder="emailPlaceholder" placeholder="name@example.com" required>
 
         <label for="siPassword" data-i18n="passwordLabel">Password</label>
         <div style="position:relative;">
@@ -150,27 +120,22 @@
                  placeholder="Enter password" required style="padding-right:44px;">
           <button type="button" onclick="togglePassword('siPassword','siEyeBtn')" id="siEyeBtn"
                   aria-label="Show password"
-                  style="position:absolute;right:0;top:0;height:100%;width:42px;background:none;
-                         border:none;cursor:pointer;font-size:18px;color:#666;display:flex;
-                         align-items:center;justify-content:center;margin:0;padding:0;">👁</button>
+                  style="position:absolute;right:0;top:0;height:100%;width:42px;background:none;border:none;cursor:pointer;font-size:18px;color:#666;display:flex;align-items:center;justify-content:center;margin:0;padding:0;">👁</button>
         </div>
 
         <div style="display:flex;align-items:center;gap:8px;margin:10px 0 4px;">
           <input type="checkbox" id="rememberEmail" style="width:18px;height:18px;margin:0;cursor:pointer;flex-shrink:0;">
-          <label for="rememberEmail" style="margin:0;font-weight:normal;font-size:14px;cursor:pointer;"
-                 data-i18n="rememberEmail">Remember my email address</label>
+          <label for="rememberEmail" style="margin:0;font-weight:normal;font-size:14px;cursor:pointer;" data-i18n="rememberEmail">Remember my email address</label>
         </div>
 
         <button type="submit" data-i18n="signInBtn">Sign In</button>
       </form>
     </div>
 
-    <!-- Register panel -->
     <div id="panelRegister" class="tab-panel" role="tabpanel" aria-labelledby="tabRegister">
       <form id="registerForm" onsubmit="handleSignUp(event)">
         <label for="regEmail" data-i18n="emailLabel">Email Address</label>
-        <input type="email" id="regEmail" data-i18n-placeholder="emailPlaceholder"
-               placeholder="name@example.com" required>
+        <input type="email" id="regEmail" data-i18n-placeholder="emailPlaceholder" placeholder="name@example.com" required>
 
         <label for="regPassword" data-i18n="passwordLabel">Password</label>
         <div style="position:relative;">
@@ -178,20 +143,47 @@
                  placeholder="At least 8 characters" required minlength="8" style="padding-right:44px;">
           <button type="button" onclick="togglePassword('regPassword','regEyeBtn')" id="regEyeBtn"
                   aria-label="Show password"
-                  style="position:absolute;right:0;top:0;height:100%;width:42px;background:none;
-                         border:none;cursor:pointer;font-size:18px;color:#666;display:flex;
-                         align-items:center;justify-content:center;margin:0;padding:0;">👁</button>
+                  style="position:absolute;right:0;top:0;height:100%;width:42px;background:none;border:none;cursor:pointer;font-size:18px;color:#666;display:flex;align-items:center;justify-content:center;margin:0;padding:0;">👁</button>
         </div>
 
         <button type="submit" data-i18n="createAccountBtn">Create Account</button>
       </form>
     </div>
 
-  </div><!-- /.container -->
+  </div>
 
-  <script src="js/translations.js"></script>
   <script>
-    // ── Apply saved language on load ──────────────────────────────
+    const TRANSLATIONS = {
+      en: { appTitle:'Holiday Currency Converter', tabSignIn:'Sign In', tabRegister:'Register', emailLabel:'Email Address', emailPlaceholder:'name@example.com', passwordLabel:'Password', signInPasswordPlaceholder:'Enter password', rememberEmail:'Remember my email address', signInBtn:'Sign In', regPasswordPlaceholder:'At least 8 characters', createAccountBtn:'Create Account', navHome:'🏠 Home', navContact:'✉️ Contact us', navPrivacy:'🔒 Privacy Policy', navDeleteAccount:'🗑️ Delete Account', navSignOut:'🚪 Sign Out', navSignInPage:'🔑 Sign In / Register', signedInMsg:'✅ Signed in successfully! Redirecting to Home page...', accountCreatedMsg:'✅ Registration successful! Redirecting to verification...', sdkNotLoadedMsg:'Cognito SDK not loaded. Check your internet connection.', showPasswordLabel:'Show password', hidePasswordLabel:'Hide password' },
+      fr: { appTitle:'Convertisseur de Devises Vacances', tabSignIn:'Connexion', tabRegister:'Inscription', emailLabel:'Adresse e-mail', emailPlaceholder:'nom@exemple.com', passwordLabel:'Mot de passe', signInPasswordPlaceholder:'Entrez votre mot de passe', rememberEmail:'Se souvenir de mon adresse e-mail', signInBtn:'Se connecter', regPasswordPlaceholder:'Au moins 8 caractères', createAccountBtn:'Créer un compte', navHome:'🏠 Accueil', navContact:'✉️ Nous contacter', navPrivacy:'🔒 Politique de confidentialité', navDeleteAccount:'🗑️ Supprimer le compte', navSignOut:'🚪 Se déconnecter', navSignInPage:'🔑 Connexion / Inscription', signedInMsg:'✅ Connexion réussie ! Redirection...', accountCreatedMsg:'✅ Inscription réussie ! Redirection vers la vérification...', sdkNotLoadedMsg:'SDK Cognito non chargé. Vérifiez votre connexion Internet.', showPasswordLabel:'Afficher le mot de passe', hidePasswordLabel:'Masquer le mot de passe' },
+      es: { appTitle:'Conversor de Divisas para Vacaciones', tabSignIn:'Iniciar sesión', tabRegister:'Registrarse', emailLabel:'Dirección de correo electrónico', emailPlaceholder:'nombre@ejemplo.com', passwordLabel:'Contraseña', signInPasswordPlaceholder:'Introduzca la contraseña', rememberEmail:'Recordar mi correo electrónico', signInBtn:'Iniciar sesión', regPasswordPlaceholder:'Al menos 8 caracteres', createAccountBtn:'Crear cuenta', navHome:'🏠 Inicio', navContact:'✉️ Contáctenos', navPrivacy:'🔒 Política de privacidad', navDeleteAccount:'🗑️ Eliminar cuenta', navSignOut:'🚪 Cerrar sesión', navSignInPage:'🔑 Iniciar sesión / Registrarse', signedInMsg:'✅ ¡Sesión iniciada! Redirigiendo...', accountCreatedMsg:'✅ ¡Registro exitoso! Redirigiendo a la verificación...', sdkNotLoadedMsg:'SDK de Cognito no cargado. Compruebe su conexión.', showPasswordLabel:'Mostrar contraseña', hidePasswordLabel:'Ocultar contraseña' },
+      de: { appTitle:'Urlaubs-Währungsrechner', tabSignIn:'Anmelden', tabRegister:'Registrieren', emailLabel:'E-Mail-Adresse', emailPlaceholder:'name@beispiel.de', passwordLabel:'Passwort', signInPasswordPlaceholder:'Passwort eingeben', rememberEmail:'E-Mail-Adresse merken', signInBtn:'Anmelden', regPasswordPlaceholder:'Mindestens 8 Zeichen', createAccountBtn:'Konto erstellen', navHome:'🏠 Startseite', navContact:'✉️ Kontakt', navPrivacy:'🔒 Datenschutzrichtlinie', navDeleteAccount:'🗑️ Konto löschen', navSignOut:'🚪 Abmelden', navSignInPage:'🔑 Anmelden / Registrieren', signedInMsg:'✅ Erfolgreich angemeldet! Weiterleitung...', accountCreatedMsg:'✅ Registrierung erfolgreich! Weiterleitung zur Verifizierung...', sdkNotLoadedMsg:'Cognito SDK nicht geladen. Überprüfen Sie Ihre Internetverbindung.', showPasswordLabel:'Passwort anzeigen', hidePasswordLabel:'Passwort verbergen' },
+      it: { appTitle:'Convertitore di Valute per Vacanze', tabSignIn:'Accedi', tabRegister:'Registrati', emailLabel:'Indirizzo email', emailPlaceholder:'nome@esempio.it', passwordLabel:'Password', signInPasswordPlaceholder:'Inserisci la password', rememberEmail:'Ricorda il mio indirizzo email', signInBtn:'Accedi', regPasswordPlaceholder:'Almeno 8 caratteri', createAccountBtn:'Crea account', navHome:'🏠 Home', navContact:'✉️ Contattaci', navPrivacy:'🔒 Informativa sulla privacy', navDeleteAccount:'🗑️ Elimina account', navSignOut:'🚪 Esci', navSignInPage:'🔑 Accedi / Registrati', signedInMsg:'✅ Accesso effettuato! Reindirizzamento...', accountCreatedMsg:'✅ Registrazione riuscita! Reindirizzamento alla verifica...', sdkNotLoadedMsg:'SDK Cognito non caricato. Verifica la connessione Internet.', showPasswordLabel:'Mostra password', hidePasswordLabel:'Nascondi password' }
+    };
+
+    function getLang() { return localStorage.getItem('appLang') || 'en'; }
+    function t(key) { const tbl = TRANSLATIONS[getLang()] || TRANSLATIONS.en; return tbl[key] !== undefined ? tbl[key] : (TRANSLATIONS.en[key] || key); }
+    function applyTranslations(lang) {
+      const tbl = TRANSLATIONS[lang] || TRANSLATIONS.en;
+      document.querySelectorAll('[data-i18n]').forEach(el => { const k = el.getAttribute('data-i18n'); if (tbl[k] !== undefined) el.innerHTML = tbl[k]; });
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => { const k = el.getAttribute('data-i18n-placeholder'); if (tbl[k] !== undefined) el.placeholder = tbl[k]; });
+    }
+    function _rebuildNavDropdown(lang) {
+      const tbl = TRANSLATIONS[lang] || TRANSLATIONS.en;
+      const dd = document.getElementById('titleDropdown');
+      if (!dd) return;
+      const cur = dd.value;
+      dd.querySelectorAll('option[data-i18n-nav]').forEach(opt => { const k = opt.getAttribute('data-i18n-nav'); if (tbl[k] !== undefined) opt.textContent = tbl[k]; });
+      dd.value = cur;
+    }
+    function setLang(code) {
+      localStorage.setItem('appLang', code);
+      document.documentElement.lang = code;
+      applyTranslations(code);
+      document.querySelectorAll('.lang-picker').forEach(s => { s.value = code; });
+      _rebuildNavDropdown(code);
+    }
+
     (function() {
       const lang = getLang();
       document.documentElement.lang = lang;
@@ -199,6 +191,10 @@
       applyTranslations(lang);
       _rebuildNavDropdown(lang);
     })();
+
+    const poolData = { UserPoolId: 'eu-west-2_BY54tpvV0', ClientId: '57hfik5lgckcarpu3qjoojmepf' };
+    let userPool;
+    if (typeof AmazonCognitoIdentity !== 'undefined') { userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData); }
 
     function navigateToPage(url) {
       if (url === 'signout') { handleSignOut(); return; }
@@ -216,17 +212,11 @@
       window.location.href = 'signin.html';
     }
 
-    const poolData = { UserPoolId: 'eu-west-2_BY54tpvV0', ClientId: '57hfik5lgckcarpu3qjoojmepf' };
-    let userPool;
-    if (typeof AmazonCognitoIdentity !== 'undefined') {
-      userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
-    }
-
     function togglePassword(inputId, btnId) {
       const input = document.getElementById(inputId);
-      const btn   = document.getElementById(btnId);
-      const show  = input.type === 'password';
-      input.type      = show ? 'text' : 'password';
+      const btn = document.getElementById(btnId);
+      const show = input.type === 'password';
+      input.type = show ? 'text' : 'password';
       btn.textContent = show ? '🙈' : '👁';
       btn.setAttribute('aria-label', show ? t('hidePasswordLabel') : t('showPasswordLabel'));
     }
@@ -244,7 +234,7 @@
     function showStatus(message, isError = false) {
       const el = document.getElementById('statusMessage');
       el.textContent = message;
-      el.className   = 'status-msg ' + (isError ? 'error' : 'success');
+      el.className = 'status-msg ' + (isError ? 'error' : 'success');
       el.style.display = 'block';
     }
 
@@ -257,11 +247,10 @@
       const cognitoUser = new AmazonCognitoIdentity.CognitoUser({ Username: username, Pool: userPool });
       cognitoUser.authenticateUser(authDetails, {
         onSuccess(result) {
-          localStorage.setItem('cognitoIdToken',     result.getIdToken().getJwtToken());
+          localStorage.setItem('cognitoIdToken', result.getIdToken().getJwtToken());
           localStorage.setItem('cognitoAccessToken', result.getAccessToken().getJwtToken());
-          if (document.getElementById('rememberEmail').checked) {
-            localStorage.setItem('rememberedEmail', username);
-          } else { localStorage.removeItem('rememberedEmail'); }
+          if (document.getElementById('rememberEmail').checked) { localStorage.setItem('rememberedEmail', username); }
+          else { localStorage.removeItem('rememberedEmail'); }
           showStatus(t('signedInMsg'));
           setTimeout(() => { window.location.href = 'index.html'; }, 1500);
         },
@@ -272,13 +261,13 @@
     function handleSignUp(event) {
       event.preventDefault();
       if (!userPool) { showStatus(t('sdkNotLoadedMsg'), true); return; }
-      const email    = document.getElementById('regEmail').value.trim();
+      const email = document.getElementById('regEmail').value.trim();
       const password = document.getElementById('regPassword').value;
       const attributeList = [new AmazonCognitoIdentity.CognitoUserAttribute({ Name: 'email', Value: email })];
       userPool.signUp(email, password, attributeList, null, (err) => {
         if (err) { showStatus(err.message || JSON.stringify(err), true); return; }
         showStatus(t('accountCreatedMsg'));
-        setTimeout(() => { window.location.href = 'verify.html?email=' + encodeURIComponent(email); }, 1000);
+        setTimeout(() => { window.location.href = `verify.html?email=${encodeURIComponent(email)}`; }, 1000);
       });
     }
 
