@@ -154,8 +154,14 @@
         /* Projects */
         .projects-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         .project-card-link {
@@ -325,36 +331,37 @@
     <section id="projects">
         <h2>Key Projects</h2>
         <div class="projects-grid">
-            <a href="https://www.allanfamilyholidayphotos.com" target="_blank" class="project-card-link">
+            <div class="project-card-link">
                 <div class="project-card">
                     <h3>My First Project</h3>
                     <p>Produced a static website hosted on AWS S3 and delivered globally via Amazon CloudFront and Route 53 to showcase my family holiday photos over the last 7 years.</p>
-                    <p>Click here to visit the website.</p>                    
+                    <p><a href="https://www.allanfamilyholidayphotos.com" target="_blank" rel="noopener" style="color:inherit; text-decoration:none;">Click here to visit the website.</a></p>
                 </div>
-            </a>
-           
+            </div>
+
+            <div class="project-card-link">
                 <div class="project-card">
                     <h3>Certified Cloud Practitioner Portfolio</h3>
                     <p>A second website. The one you are currently looking at.</p>
                 </div>
+            </div>
 
-            <a href="https://www.stuart-allan.com/CurrencyConverterApp/index.html" target="_blank" class="project-card-link">
+            <div class="project-card-link">
                 <div class="project-card">
                     <h3>A mobile phone app (also hosted here as a web app)</h3>
                     <p>Produced an Android accessible mobile phone app.
                         Developed initially as a .html web app hosted on AWS Amplify.
                     </p>
-                    <p>Click here to visit the website.</p>
+                    <p><a href="https://www.stuart-allan.com/CurrencyConverterApp/index.html" target="_blank" rel="noopener" style="color:inherit; text-decoration:none;">Click here to visit the website.</a></p>
                     <a href="https://play.google.com/store/apps/details?id=com.sallan.holidaycurrencyconverter&hl=en"
                        target="_blank" rel="noopener"
-                       onclick="event.stopPropagation();"
                        aria-label="Get it on Google Play">
                         <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
                              alt="Get it on Google Play"
                              style="height:60px; margin-top:10px;">
                     </a>
                 </div>
-            </a>
+            </div>
 
 
         </div>
